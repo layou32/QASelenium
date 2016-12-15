@@ -1,5 +1,6 @@
 package selenium;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,11 +52,16 @@ public class DriverFactory {
 													// the driver object and
 													// launch the browser
 	{
+		String osName = (System.getProperty("os.name").toLowerCase().contains("mac") ? "mac" : "windows");
 		if (browserType.equals("chrome")) {
 			Path currentRelativePath = Paths.get("");
-			String s = currentRelativePath.toAbsolutePath().toString();
-			System.setProperty("webdriver.chrome.driver", s
-					+ "\\DriverEXE\\chromedriver.exe");
+			String pathToDriver = currentRelativePath.toAbsolutePath().toString() +
+					File.separator + "DriverEXE" + File.separator;
+			if (osName.equals("windows")) {
+				System.setProperty("webdriver.chrome.driver", pathToDriver + "chromedriver.exe");
+			} else {
+				System.setProperty("webdriver.chrome.driver", pathToDriver + "chromedriver");
+			}
 			driver.set(new ChromeDriver());
 			int n = 10;
 			// Seems to ocassionaly not be able to maximize window
