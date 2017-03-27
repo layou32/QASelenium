@@ -28,7 +28,7 @@ public class ScreenshotOnFailure extends TestListenerAdapter {
 			Date date = new Date();
 			String classAndMethodName = date.getTime() + tr.getMethod().getMethodName();
 			try {
-				NewFileNamePath =directory.getCanonicalPath() + "\\target\\surefire-reports\\html\\Screenshots\\"+classAndMethodName +".png";
+				NewFileNamePath =directory.getCanonicalPath() + File.separator + "target" +File.separator + "surefire-reports" + File.separator + "html" + File.separator + "Screenshots" + File.separator +classAndMethodName +".png";
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -38,7 +38,7 @@ public class ScreenshotOnFailure extends TestListenerAdapter {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			String reportFilePath = ".\\Screenshots\\"+classAndMethodName +".png";
+			String reportFilePath = "." + File.separator + "Screenshots" + File.separator +classAndMethodName +".png";
 			System.setProperty("org.uncommons.reportng.escape-output", "false");	
 			Reporter.log("<a href=" + reportFilePath + ">Click to open screenshot</a><img src=" + reportFilePath +  " height='350' width='700'>");
 			Reporter.log(date.toString());
