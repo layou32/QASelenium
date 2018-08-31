@@ -12,6 +12,7 @@ import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 
 import pages.HomePage;
+import pages.SearchResultsPage;
 
 import selenium.DriverSetup;
 
@@ -57,5 +58,9 @@ public class AmazonTest {
 		HomePage.inputSearch(driver).sendKeys("ipad air 2 case");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 		HomePage.buttonSearch(driver).click();
+		// No existen tienes que aplicar el dropdown
+		SearchResultsPage.caseFilter(driver).click();
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		SearchResultsPage.priceFilter(driver).click();
 	}
 }
