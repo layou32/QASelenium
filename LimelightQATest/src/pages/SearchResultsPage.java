@@ -4,7 +4,6 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class SearchResultsPage {
@@ -28,12 +27,19 @@ public class SearchResultsPage {
 		return elements;
 	}
 	
+	public static WebElement productCase(WebDriver driver, int pos) {
+		element = driver.findElement(By.id("result_" + pos));
+		element = element.findElement(By.cssSelector("a.a-link-normal"));
+		return element;
+	}
+	
 	public static WebElement titleProduct(WebElement elem) {
 		element = elem.findElement(By.cssSelector("h2.s-access-title"));
 		return element;
 	}
 	
-	public static WebElement priceProduct(WebElement elem) {		
+	public static WebElement priceProduct(WebElement elem) {
+		element = elem.findElement(By.cssSelector("span.sx-price-whole"));
 		return element;
 	}
 	
