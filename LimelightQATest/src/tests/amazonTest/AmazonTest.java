@@ -2,6 +2,7 @@ package tests.amazonTest;
 
 import static org.junit.Assert.*;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,11 +13,6 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Parameters;
 
 import models.Product;
 import pages.HomePage;
@@ -33,26 +29,33 @@ public class AmazonTest {
 	private static List<WebElement> elementTmp;
 	private static List<Product> products = new ArrayList<>();
 	private static Product product = null;
-
-	@Test
-	public void groupSetup() throws Exception{	
+	String title = "";
+	String price = "";
+	String stars = "";
+	
+	@Before
+	public void setupDriver () {		
+		// Step 1
 		driver = DriverSetup.setupDriver(DriverSetup.Browser.Chrome, "chromedriver");		
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 		driver.get("https://www.amazon.com");
+	}
+
+	@Test
+	public void ipadSearch() throws Exception{		
+		// Step 2
 		HomePage.inputSearch(driver).sendKeys("ipad air 2 case");		
 		HomePage.buttonSearch(driver).click();
-		// No existen tienes que aplicar el dropdown
-		SearchResultsPage.caseFilter(driver).click();		
+		// Step 3
+		SearchResultsPage.caseFilter(driver).click();
+		// Step 4
 		SearchResultsPage.priceFilter(driver).click();
-		// firstFive = SearchResultsPage.firstFive(driver);
-		String title = "";
-		String price = "";
-		String stars = "";
+
 		try {						
 			for (int i = 0; i < 5; i++) {
 				Thread.sleep(5000);			
 				SearchResultsPage.productCase(driver, i).click();									
-				Thread.sleep(8000);
+				Thread.sleep(5000);
 				title = ProductDetailPage.titleProduct(driver).getText();
 				elementTmp = ProductDetailPage.priceProduct(driver);
 				if (elementTmp.size() > 0) {
@@ -66,6 +69,7 @@ public class AmazonTest {
 				} else {
 					stars = "0.0";
 				}
+				// Step 5
 				System.out.println("Product: " + title);
 				System.out.println("Price: " + price);
 				System.out.println("stars: " + stars);
@@ -73,19 +77,19 @@ public class AmazonTest {
 				double iStars = Double.parseDouble(stars.substring(0, 3));
 				product = new Product(title, iPrice, iStars);
 				products.add(product);
-				
+				// Step 6
 				if (iPrice > 49 && iPrice < 101) {
 					System.out.println("The price is in the range");
 				}
 				ProductDetailPage.backToListLink(driver).click();				
 			}			
 			Thread.sleep(5000);
-			// Order by price
+			// Step 7
 			Collections.sort(products, new SortByPrice());
 			for (int j=0; j < products.size(); j++) {
 				System.out.println(products.get(j).price);
 			}
-			// Order by stars
+			// Step 8
 			Collections.sort(products, new SortByStars());
 			for (int j=0; j < products.size(); j++) {
 				System.out.println(products.get(j).stars);
@@ -95,15 +99,15 @@ public class AmazonTest {
 			for (int j=0; j < products.size(); j++) {
 				// System.out.println(products.get(j).price);
 				if (prodTmp == null) {
-					prodTmp = products.get(j);
+					prodTmp = products.get(j);					
 					continue;
 				}
 				int resultCompare = Double.compare(products.get(j).price, prodTmp.price);
 				boolean orderCorrect = false;
 				if (resultCompare == 0 || resultCompare > 0) {
 					orderCorrect = true;
-				}				
-				//assertTrue("Order correct", orderCorrect);
+				}								
+				assertTrue(orderCorrect);
 				//assertFalse("Order incorrect", orderCorrect);
 			}
 		} catch (InterruptedException e) {
