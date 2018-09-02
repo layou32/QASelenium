@@ -53,9 +53,9 @@ public class AmazonTest {
 
 		try {						
 			for (int i = 0; i < 5; i++) {
-				Thread.sleep(5000);			
+				Thread.sleep(3000);			
 				SearchResultsPage.productCase(driver, i).click();									
-				Thread.sleep(5000);
+				Thread.sleep(3000);
 				title = ProductDetailPage.titleProduct(driver).getText();
 				elementTmp = ProductDetailPage.priceProduct(driver);
 				if (elementTmp.size() > 0) {
@@ -83,7 +83,7 @@ public class AmazonTest {
 				}
 				ProductDetailPage.backToListLink(driver).click();				
 			}			
-			Thread.sleep(5000);
+			Thread.sleep(3000);
 			// Step 7
 			Collections.sort(products, new SortByPrice());
 			for (int j=0; j < products.size(); j++) {
@@ -94,10 +94,10 @@ public class AmazonTest {
 			for (int j=0; j < products.size(); j++) {
 				System.out.println(products.get(j).stars);
 			}
-			Collections.sort(products, new SortByPrice());
-			Product prodTmp = null;
+			
+			Collections.sort(products, new SortByPrice());			
+			Product prodTmp = null;			
 			for (int j=0; j < products.size(); j++) {
-				// System.out.println(products.get(j).price);
 				if (prodTmp == null) {
 					prodTmp = products.get(j);					
 					continue;
@@ -107,9 +107,17 @@ public class AmazonTest {
 				if (resultCompare == 0 || resultCompare > 0) {
 					orderCorrect = true;
 				}								
-				assertTrue(orderCorrect);
-				//assertFalse("Order incorrect", orderCorrect);
+				assertTrue("Order correct", orderCorrect);				
 			}
+			
+			Collections.sort(products, new SortByStars());
+			int pursacheChoise = Double.compare(products.get(4).price, products.get(3).price);
+			if (pursacheChoise <= 0) {
+				System.out.println("Buy the: " + products.get(3).title);
+			} else {
+				System.out.println("Buy the: " + products.get(4).title);
+			}
+			
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			System.out.println("D");
